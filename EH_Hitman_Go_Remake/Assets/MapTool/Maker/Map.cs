@@ -53,7 +53,6 @@ public class MapGenerator : MonoBehaviour
         //Moving this transform to the gridOrigin for simpler nodes distribution
         myGrid = new Grid(CalculateDimensions(), FindOriginLocation());
         transform.position = myGrid.GetPosition();
-
     }
 
     void OnEnable()
