@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce31d6d63c96ae4696854421cb7e484, type: 3}
   m_Name: Map1
   m_EditorClassIdentifier: 
-  Dimensions: {x: 50, y: 25}
+  Dimensions: {x: 100, y: 100}
