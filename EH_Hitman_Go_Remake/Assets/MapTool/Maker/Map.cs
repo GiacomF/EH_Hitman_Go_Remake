@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 //This code will create a functioning Grid upon any Parent Object under which this object is placed
 public class MapGenerator : MonoBehaviour
@@ -43,23 +46,62 @@ public class MapGenerator : MonoBehaviour
     //Method to Map the objToMap and create a Grid on top
     objectToMap objToMap;
     [SerializeField] Grid myGrid;
+    public int Spacing = 1;
+    private List<Vector3> allNodesTransform = new List<Vector3>();
     void GenerateGrid()
     {
         Transform parentObject = gameObject.transform.parent;
 
-        //Using the Local Scale as measures assures corret position
+        //Using the Local Scale as measures assures correct position
         objToMap = new objectToMap(parentObject.localScale);
 
         //Moving this transform to the gridOrigin for simpler nodes distribution
         myGrid = new Grid(CalculateDimensions(), FindOriginLocation());
         transform.position = myGrid.GetPosition();
+
+        int offset = Spacing;
+        for(int i= 0; i <= myGrid.XY.x; i += 1 * Spacing)
+        {
+            for(int z = 0; z <= myGrid.XY.y; z += 1 * Spacing)
+            {
+                GameObject Node = new GameObject();
+                Node.transform.parent = this.transform;
+                Vector3 position = Node.transform.position;
+                position = myGrid.GetPosition() + new Vector3(i, 0, z);
+                allNodesTransform.Add(position);
+
+            }
+        }
     }
+        
 
     void OnEnable()
     {
         if(gameObject.transform.parent == null) {Debug.LogWarning("Place MapComponent as MapObject son"); return;}
         
         GenerateGrid();    
+    }
+
+    void OnDisable()
+    {
+        int numberOfChildren = this.transform.childCount;
+
+        for (int i = 0; i < numberOfChildren; i++)
+        {
+            GameObject obj = this.transform.GetChild(i).gameObject;
+            Destroy(obj);
+        }
+
+        allNodesTransform.Clear();
+    }
+
+    void OnDrawGizmosSelected() 
+    {
+        foreach (Vector3 position in allNodesTransform)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(position, 0.1f);
+        }
     }
 
     #region GenerateGrid Methods
