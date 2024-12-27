@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 //This code will create a functioning Grid upon any Parent Object under which this object is placed
 public class MapGenerator : MonoBehaviour
@@ -48,8 +46,15 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] Grid myGrid;
     public int Spacing = 1;
     private List<Vector3> allNodesTransform = new List<Vector3>();
+    public GameObject NodePrefab;
     void GenerateGrid()
     {
+        if(NodePrefab.GetComponent<Node>() == null)
+        {
+            Debug.LogWarning("Prefab assigned doesn't contain Node script");
+            return;
+        }
+
         Transform parentObject = gameObject.transform.parent;
 
         //Using the Local Scale as measures assures correct position
@@ -64,12 +69,14 @@ public class MapGenerator : MonoBehaviour
         {
             for(int z = 0; z <= myGrid.XY.y; z += 1 * Spacing)
             {
-                GameObject Node = new GameObject();
-                Node.transform.parent = this.transform;
-                Vector3 position = Node.transform.position;
-                position = myGrid.GetPosition() + new Vector3(i, 0, z);
+                GameObject NodeInstance = Instantiate(NodePrefab);
+                Transform NodeInstanceTransform = NodeInstance.transform;
+                Node NodeScript = NodeInstance.gameObject.GetComponent<Node>();
+                NodeInstanceTransform.parent = this.transform;
+                Vector3 position = myGrid.GetPosition() + new Vector3(i, 0, z);
+                NodeInstanceTransform.position = position;
+                NodeScript.SetCoords(new Vector2(NodeInstanceTransform.position.x, NodeInstanceTransform.position.z));
                 allNodesTransform.Add(position);
-
             }
         }
     }
@@ -93,15 +100,6 @@ public class MapGenerator : MonoBehaviour
         }
 
         allNodesTransform.Clear();
-    }
-
-    void OnDrawGizmosSelected() 
-    {
-        foreach (Vector3 position in allNodesTransform)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(position, 0.1f);
-        }
     }
 
     #region GenerateGrid Methods

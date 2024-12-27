@@ -6,7 +6,7 @@
             "id": "cd2b04d9-5207-4361-a09a-e814bb2a79fd",
             "actions": [
                 {
-                    "name": "Place Node",
+                    "name": "SelectNode",
                     "type": "Button",
                     "id": "ae424ebf-1785-4da2-aa14-28b8c39bacd3",
                     "expectedControlType": "Button",
@@ -15,7 +15,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RemoveNode",
+                    "name": "DeselectNode",
                     "type": "Button",
                     "id": "393f1454-e2e3-4dc7-b5ec-bed9cdabd79b",
                     "expectedControlType": "Button",
@@ -32,7 +32,7 @@
                     "interactions": "Tap",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "Place Node",
+                    "action": "SelectNode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -43,7 +43,7 @@
                     "interactions": "Tap",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "RemoveNode",
+                    "action": "DeselectNode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

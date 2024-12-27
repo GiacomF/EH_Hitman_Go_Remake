@@ -28,7 +28,7 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
             ""id"": ""cd2b04d9-5207-4361-a09a-e814bb2a79fd"",
             ""actions"": [
                 {
-                    ""name"": ""Place Node"",
+                    ""name"": ""SelectNode"",
                     ""type"": ""Button"",
                     ""id"": ""ae424ebf-1785-4da2-aa14-28b8c39bacd3"",
                     ""expectedControlType"": ""Button"",
@@ -37,7 +37,7 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""RemoveNode"",
+                    ""name"": ""DeselectNode"",
                     ""type"": ""Button"",
                     ""id"": ""393f1454-e2e3-4dc7-b5ec-bed9cdabd79b"",
                     ""expectedControlType"": ""Button"",
@@ -54,7 +54,7 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": ""Tap"",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""Place Node"",
+                    ""action"": ""SelectNode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -65,7 +65,7 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": ""Tap"",
                     ""processors"": """",
                     ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""RemoveNode"",
+                    ""action"": ""DeselectNode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -171,8 +171,8 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
 }");
         // MapEditor
         m_MapEditor = asset.FindActionMap("MapEditor", throwIfNotFound: true);
-        m_MapEditor_PlaceNode = m_MapEditor.FindAction("Place Node", throwIfNotFound: true);
-        m_MapEditor_RemoveNode = m_MapEditor.FindAction("RemoveNode", throwIfNotFound: true);
+        m_MapEditor_SelectNode = m_MapEditor.FindAction("SelectNode", throwIfNotFound: true);
+        m_MapEditor_DeselectNode = m_MapEditor.FindAction("DeselectNode", throwIfNotFound: true);
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Interaction = m_Gameplay.FindAction("Interaction", throwIfNotFound: true);
@@ -240,14 +240,14 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
     // MapEditor
     private readonly InputActionMap m_MapEditor;
     private List<IMapEditorActions> m_MapEditorActionsCallbackInterfaces = new List<IMapEditorActions>();
-    private readonly InputAction m_MapEditor_PlaceNode;
-    private readonly InputAction m_MapEditor_RemoveNode;
+    private readonly InputAction m_MapEditor_SelectNode;
+    private readonly InputAction m_MapEditor_DeselectNode;
     public struct MapEditorActions
     {
         private @Input_Actions m_Wrapper;
         public MapEditorActions(@Input_Actions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PlaceNode => m_Wrapper.m_MapEditor_PlaceNode;
-        public InputAction @RemoveNode => m_Wrapper.m_MapEditor_RemoveNode;
+        public InputAction @SelectNode => m_Wrapper.m_MapEditor_SelectNode;
+        public InputAction @DeselectNode => m_Wrapper.m_MapEditor_DeselectNode;
         public InputActionMap Get() { return m_Wrapper.m_MapEditor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -257,22 +257,22 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MapEditorActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MapEditorActionsCallbackInterfaces.Add(instance);
-            @PlaceNode.started += instance.OnPlaceNode;
-            @PlaceNode.performed += instance.OnPlaceNode;
-            @PlaceNode.canceled += instance.OnPlaceNode;
-            @RemoveNode.started += instance.OnRemoveNode;
-            @RemoveNode.performed += instance.OnRemoveNode;
-            @RemoveNode.canceled += instance.OnRemoveNode;
+            @SelectNode.started += instance.OnSelectNode;
+            @SelectNode.performed += instance.OnSelectNode;
+            @SelectNode.canceled += instance.OnSelectNode;
+            @DeselectNode.started += instance.OnDeselectNode;
+            @DeselectNode.performed += instance.OnDeselectNode;
+            @DeselectNode.canceled += instance.OnDeselectNode;
         }
 
         private void UnregisterCallbacks(IMapEditorActions instance)
         {
-            @PlaceNode.started -= instance.OnPlaceNode;
-            @PlaceNode.performed -= instance.OnPlaceNode;
-            @PlaceNode.canceled -= instance.OnPlaceNode;
-            @RemoveNode.started -= instance.OnRemoveNode;
-            @RemoveNode.performed -= instance.OnRemoveNode;
-            @RemoveNode.canceled -= instance.OnRemoveNode;
+            @SelectNode.started -= instance.OnSelectNode;
+            @SelectNode.performed -= instance.OnSelectNode;
+            @SelectNode.canceled -= instance.OnSelectNode;
+            @DeselectNode.started -= instance.OnDeselectNode;
+            @DeselectNode.performed -= instance.OnDeselectNode;
+            @DeselectNode.canceled -= instance.OnDeselectNode;
         }
 
         public void RemoveCallbacks(IMapEditorActions instance)
@@ -411,8 +411,8 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
     }
     public interface IMapEditorActions
     {
-        void OnPlaceNode(InputAction.CallbackContext context);
-        void OnRemoveNode(InputAction.CallbackContext context);
+        void OnSelectNode(InputAction.CallbackContext context);
+        void OnDeselectNode(InputAction.CallbackContext context);
     }
     public interface IGameplayActions
     {
