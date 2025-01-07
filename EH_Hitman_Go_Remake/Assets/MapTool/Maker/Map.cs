@@ -45,7 +45,6 @@ public class MapGenerator : MonoBehaviour
     objectToMap objToMap;
     [SerializeField] Grid myGrid;
     public int Spacing = 1;
-    private List<Vector3> allNodesTransform = new List<Vector3>();
     public GameObject NodePrefab;
     void GenerateGrid()
     {
@@ -64,7 +63,6 @@ public class MapGenerator : MonoBehaviour
         myGrid = new Grid(CalculateDimensions(), FindOriginLocation());
         transform.position = myGrid.GetPosition();
 
-        int offset = Spacing;
         for(int i= 0; i <= myGrid.XY.x; i += 1 * Spacing)
         {
             for(int z = 0; z <= myGrid.XY.y; z += 1 * Spacing)
@@ -75,12 +73,63 @@ public class MapGenerator : MonoBehaviour
                 NodeInstanceTransform.parent = this.transform;
                 Vector3 position = myGrid.GetPosition() + new Vector3(i, 0, z);
                 NodeInstanceTransform.position = position;
-                NodeScript.SetCoords(new Vector2(NodeInstanceTransform.position.x, NodeInstanceTransform.position.z));
-                allNodesTransform.Add(position);
+                NodeScript.SetCoords(NodeInstanceTransform.position);
             }
         }
     }
-        
+
+    public GameObject ConnectionPrefab;
+    private void CreateConnection(Node Origin, Node Destination)
+    {
+        Vector3 positionA = Origin.GetCoords();
+        Vector3 positionB = Destination.GetCoords();
+
+        //Get median point
+        Vector3 position = (positionA + positionB) / 2;
+        //Get direction
+        Vector3 direction = positionB - positionA;
+        //Get rotation
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        //distance == predetermined Spacing
+        float distance = Spacing * 3;
+
+        //Instantiate object using calculated parameters
+        GameObject connection = Instantiate(ConnectionPrefab, position, rotation, Origin.transform);
+        //Scale object according to distance
+        connection.transform.localScale = new Vector3(connection.transform.localScale.x, connection.transform.localScale.y, distance);                                                             
+    }
+
+    private void ElaborateConnections()
+    {
+        Node[] allNodes = FindObjectsOfType<Node>();
+        foreach (Node node in allNodes)
+        {
+            List<Node> allConnections = node.GetConnections();
+            if (allConnections == null || allConnections.Count == 0)
+            continue;
+
+            for (int i = 0; i < allConnections.Count; i++)
+            {
+                Node currentConnection = allConnections[i];
+                CreateConnection(node, currentConnection);
+            }
+        }
+    }
+
+    public bool CreateConnections;
+    private void ConnectNodes()
+    {
+        if (CreateConnections == true)
+        {
+            ElaborateConnections();
+            CreateConnections = false;
+        }
+    }
+
+    void Update()
+    {
+        ConnectNodes();
+    }
 
     void OnEnable()
     {
@@ -91,15 +140,13 @@ public class MapGenerator : MonoBehaviour
 
     void OnDisable()
     {
-        int numberOfChildren = this.transform.childCount;
+        int numberOfNodes = this.transform.childCount;
 
-        for (int i = 0; i < numberOfChildren; i++)
+        for (int i = 0; i < numberOfNodes; i++)
         {
             GameObject obj = this.transform.GetChild(i).gameObject;
             Destroy(obj);
         }
-
-        allNodesTransform.Clear();
     }
 
     #region GenerateGrid Methods
