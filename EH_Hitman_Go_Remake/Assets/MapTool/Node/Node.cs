@@ -1,11 +1,14 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Node : MonoBehaviour
 {
+    //Makes the position readable
     public Vector3 Coords;
+    //Holds all the Node connections
     public List<Node> ConnectedNodes;
+    //Contains all special functions of the Node
+    public List<NodeDecorator> Decorators;
 
     private void OnEnable()
     {
@@ -27,8 +30,8 @@ public class Node : MonoBehaviour
         return ConnectedNodes;
     }
 
-    private void RegisterIntoManager()
+    public (Vector3, List<Node>, List<NodeDecorator>) RegisterIntoManager()
     {
-
+        return (Coords, ConnectedNodes, Decorators);
     }
 }

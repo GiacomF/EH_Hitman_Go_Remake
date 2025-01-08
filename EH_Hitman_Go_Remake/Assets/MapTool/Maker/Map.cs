@@ -74,6 +74,7 @@ public class MapGenerator : MonoBehaviour
                 Vector3 position = myGrid.GetPosition() + new Vector3(i, 0, z);
                 NodeInstanceTransform.position = position;
                 NodeScript.SetCoords(NodeInstanceTransform.position);
+                NodeInstance.name = $"Node {NodeScript.Coords.x};{NodeScript.Coords.z}";
             }
         }
     }

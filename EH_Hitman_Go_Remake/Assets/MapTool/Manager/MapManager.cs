@@ -1,33 +1,52 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    //I'm designing all the script in pseudo-code, and proceed by replacing
+    [Serializable]
+    public struct Map
+    {
+        public List<Node> MapNodes;
+    }
 
-    /*
-    
-    method to make it a Singleton
+    [SerializeField]
+    private Map currentMap;
 
-    Dictionary to match MapNodes and NodePositions NodesToPosDictionary;
-    
-    public void AddNodeToMap(MapNode thisNode, Vector3 nodePosition)
-        add to NodesToPos MapNode and nodePosition
+    private List<Node> FindNodes()
+    {
+        List<Node> nodesFound = new List<Node>();
+        
+        GameObject MapContainer = GameObject.FindWithTag("MapContainer");
+        Node[] nodes = MapContainer.GetComponentsInChildren<Node>();
+        foreach (Node node in nodes)
+        {
+            nodesFound.Add(node);
+        }
+        
+        return nodesFound;
+    }
 
-    
-    public void RemoveNodeFromMap(Vector3 Position)
-        remove from NodesToPos Positions' value
+    public bool CreateMap;
+    private Map ConstructMap()
+    {
+        currentMap = new Map();
+        currentMap.MapNodes = FindNodes();
 
-    public 
-    
+        if(currentMap.MapNodes.Count <= 0)
+        {
+            Debug.LogWarning(this.name + " " + "No nodes found on ObjectToMap");
+        }
 
-    //Draws a grid connecting all the available nodes
+        return currentMap;
+    }
 
-    public void ConnectNodes()
-        foreach kvp in NodesToPos 
-            A = take its position 
-            B = take the next kvp's position
-            raycast from A to B to see if there is an obstacle between them
-            make a ray that stretches from A to B
-
-    */
+    private void Update()
+    {
+        if(CreateMap)
+        {
+            ConstructMap();
+            CreateMap = false;
+        }
+    }
 }
