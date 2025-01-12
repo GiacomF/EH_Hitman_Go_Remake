@@ -16,7 +16,7 @@ public class Connection: MonoBehaviour
     private void UpdateConnection(SceneView sceneView)
     {
         Event e = Event.current;
-        if(Origin != null || Destination != null)
+        if(Origin != null && Destination != null)
         {
             Vector3 positionA = Origin.transform.position;
             Vector3 positionB = Destination.transform.position;

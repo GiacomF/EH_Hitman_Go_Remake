@@ -30,9 +30,43 @@ public class ToolWindow : EditorWindow
     public Step OriginStep = null;
     public Step DestinationStep = null;
 
+    public GameObject myMap;
+    private GameObject myStepsContainer;
+    private GameObject myConnectionsContainer; 
+    private Collector myCollector;
+    private void Initialize()
+    {
+        if (myMap == null) return;  // Verifica se myMap è null, se sì esci dalla funzione
+
+        generationPosition = myMap.transform.position;
+        // Aggiungi o ottieni il componente Collector
+        myCollector = myMap.GetComponent<Collector>() ?? myMap.AddComponent<Collector>();
+
+        // Gestisci la creazione dei container (StepsContainer e ConnectionsContainer)
+        myStepsContainer = EnsureContainer("StepsContainer");
+        myConnectionsContainer = EnsureContainer("ConnectionsContainer");
+    }
+
+    private GameObject EnsureContainer(string containerName)
+    {
+        // Cerca il container già esistente
+        Transform containerTransform = myMap.transform.Find(containerName);
+        
+        // Se non esiste, crea un nuovo contenitore
+        if (containerTransform == null)
+        {
+            GameObject container = new GameObject(containerName);
+            container.transform.SetParent(myMap.transform);  // Imposta il parent al mio oggetto map
+            return container;
+        }
+        
+        return containerTransform.gameObject;  // Restituisci il contenitore esistente
+    }
+
     public GameObject ConnectionPrefab;
     private List<GameObject> connections;
-    private Vector3 generationPosition = Vector3.zero;
+    private Vector3 generationPosition;
+    public Vector3 yOffset = new Vector3(0, 0.5f, 0);
     private void CreateStep()
     {
         if(OriginStep != null)
@@ -40,9 +74,10 @@ public class ToolWindow : EditorWindow
             generationPosition = OriginStep.transform.position;
         }
 
-        GameObject newStep = Instantiate(StepPrefab, generationPosition, Quaternion.identity);
+        GameObject newStep = Instantiate(StepPrefab, generationPosition, Quaternion.identity, myStepsContainer.transform);
         Step newStepComponent = newStep.GetComponent<Step>();
         newStep.name = $"Step {StepIndex}";
+        newStepComponent.myIndex = StepIndex;
             
         generatedSteps.Add(newStep);
 
@@ -50,6 +85,8 @@ public class ToolWindow : EditorWindow
         {
             CreateConnection(OriginStep.gameObject, newStep);
         }
+ 
+        myCollector.stepsCollected.Add(newStepComponent);
 
         OriginStep = newStepComponent;
         StepIndex++;
@@ -57,7 +94,7 @@ public class ToolWindow : EditorWindow
 
     private void CreateConnection(GameObject Origin, GameObject Destination)
     {
-        GameObject newObj = Instantiate(ConnectionPrefab);
+        GameObject newObj = Instantiate(ConnectionPrefab, myConnectionsContainer.transform);
         connections.Add(newObj);
 
         Step originStep = Origin.GetComponent<Step>();
@@ -77,19 +114,26 @@ public class ToolWindow : EditorWindow
         StepPrefab = (GameObject)EditorGUILayout.ObjectField(StepPrefab, typeof(GameObject), true);
         ConnectionPrefab = (GameObject)EditorGUILayout.ObjectField(ConnectionPrefab, typeof(GameObject), true);
 
+        GUILayout.Label("Map Selected", EditorStyles.boldLabel);
+        myMap = (GameObject)EditorGUILayout.ObjectField(myMap, typeof(GameObject), true);
         GUILayout.Label("Origin Step", EditorStyles.boldLabel);
         OriginStep = (Step)EditorGUILayout.ObjectField(OriginStep, typeof(Step), true);
         GUILayout.Label("Destination Step", EditorStyles.boldLabel);
         DestinationStep = (Step)EditorGUILayout.ObjectField(DestinationStep, typeof(Step), true);
         if(GUILayout.Button("Create Connection"))
         {   
-            if(DestinationStep == null)
+            Initialize();
+
+            if(myCollector != null)
             {
-                CreateStep();
-            }
-            else
-            {
-                CreateConnection(OriginStep.gameObject, DestinationStep.gameObject);
+                if(DestinationStep == null)
+                {
+                    CreateStep();
+                }
+                else
+                {
+                    CreateConnection(OriginStep.gameObject, DestinationStep.gameObject);
+                }
             }
 
             DestinationStep = null;
@@ -97,7 +141,7 @@ public class ToolWindow : EditorWindow
 
         GUILayout.Label("Generated Steps :", EditorStyles.boldLabel);
         GUILayout.Label(generatedSteps.Count.ToString(), EditorStyles.boldLabel);
-        if(GUILayout.Button("Clear List"))
+        if(GUILayout.Button("Clear"))
         {
             if(generatedSteps.Count != 0)
             {
@@ -112,11 +156,17 @@ public class ToolWindow : EditorWindow
                 DestroyImmediate(connection);
             }
 
+            /*if(myCollector != null && myCollector.stepsCollected.Count != 0)
+            {
+                myCollector.stepsCollected.Clear();
+            }*/
+
             connections.Clear();
             generatedSteps.Clear();
-            StepIndex = 1;
+            StepIndex = 0;
             DestinationStep = null;
             generationPosition = Vector3.zero;
+            myCollector.stepsCollected.Clear();
         }
     }
 
@@ -144,6 +194,7 @@ public class ToolWindow : EditorWindow
     private void OnDisable()
     {
         SceneView.duringSceneGui -= OnSceneGuiInstructions;
+        myCollector = null;
 
         //Destroy Preview
     }
