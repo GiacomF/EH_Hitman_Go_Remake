@@ -139,7 +139,7 @@ public class MapGenerator : MonoBehaviour
         GenerateGrid();    
     }
 
-    void OnDisable()
+    /*void OnDisable()
     {
         int numberOfNodes = this.transform.childCount;
 
@@ -148,7 +148,7 @@ public class MapGenerator : MonoBehaviour
             GameObject obj = this.transform.GetChild(i).gameObject;
             Destroy(obj);
         }
-    }
+    }*/
 
     #region GenerateGrid Methods
     //Calculate the dimensions of the object upon which to draw the map

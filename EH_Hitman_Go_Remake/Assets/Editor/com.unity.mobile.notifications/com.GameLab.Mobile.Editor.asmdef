@@ -1,0 +1,16 @@
+{
+    "name": "com.GameLab.Mobile.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1429410fd56f9184eb7bfafdda8be71a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

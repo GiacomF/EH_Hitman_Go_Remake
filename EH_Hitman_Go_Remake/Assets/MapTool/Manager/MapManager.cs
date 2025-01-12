@@ -13,15 +13,22 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private Map currentMap;
 
+    public GameObject MapContainer;
     private List<Node> FindNodes()
     {
         List<Node> nodesFound = new List<Node>();
         
-        GameObject MapContainer = GameObject.FindWithTag("MapContainer");
         Node[] nodes = MapContainer.GetComponentsInChildren<Node>();
         foreach (Node node in nodes)
         {
-            nodesFound.Add(node);
+            if(node.ConnectedNodes.Count != 0)
+            {
+                nodesFound.Add(node);
+            }
+            else
+            {
+                Destroy(node.gameObject);
+            }
         }
         
         return nodesFound;

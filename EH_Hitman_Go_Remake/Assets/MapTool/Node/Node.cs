@@ -12,7 +12,10 @@ public class Node : MonoBehaviour
 
     private void OnEnable()
     {
-        ConnectedNodes = new List<Node>();
+        if (ConnectedNodes == null)
+        {
+            ConnectedNodes = new List<Node>();
+        }
         Coords = transform.position;
     }
 
