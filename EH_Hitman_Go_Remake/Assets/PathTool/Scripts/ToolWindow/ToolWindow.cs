@@ -64,7 +64,7 @@ public class ToolWindow : EditorWindow
     }
 
     public GameObject ConnectionPrefab;
-    private List<GameObject> connections;
+    private List<GameObject> connections = new List<GameObject>();
     private Vector3 generationPosition;
     public Vector3 yOffset = new Vector3(0, 0.5f, 0);
     private void CreateStep()
@@ -110,8 +110,10 @@ public class ToolWindow : EditorWindow
     {
         
         GUILayout.Label(promptMessage, EditorStyles.boldLabel);
-            
+
+        GUILayout.Label("Step Prefab", EditorStyles.boldLabel);    
         StepPrefab = (GameObject)EditorGUILayout.ObjectField(StepPrefab, typeof(GameObject), true);
+        GUILayout.Label("Connection Prefab", EditorStyles.boldLabel);
         ConnectionPrefab = (GameObject)EditorGUILayout.ObjectField(ConnectionPrefab, typeof(GameObject), true);
 
         GUILayout.Label("Map Selected", EditorStyles.boldLabel);
@@ -156,17 +158,16 @@ public class ToolWindow : EditorWindow
                 DestroyImmediate(connection);
             }
 
-            /*if(myCollector != null && myCollector.stepsCollected.Count != 0)
+            if(myCollector != null && myCollector.stepsCollected.Count != 0)
             {
                 myCollector.stepsCollected.Clear();
-            }*/
+            }
 
             connections.Clear();
             generatedSteps.Clear();
             StepIndex = 0;
             DestinationStep = null;
             generationPosition = Vector3.zero;
-            myCollector.stepsCollected.Clear();
         }
     }
 
