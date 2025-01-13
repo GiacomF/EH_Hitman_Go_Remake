@@ -127,7 +127,7 @@ MonoBehaviour:
     isTrapdoor: 0
     TrapdoorConnection: {fileID: 0}
     isMist: 0
-  myMistObj: {fileID: 0}
+  myMistObj: {fileID: 3211643028479932348}
 --- !u!1001 &9210028423234388780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -140,6 +140,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mist
+      objectReference: {fileID: 0}
+    - target: {fileID: 5999520778008458384, guid: 527eac38869f2ee4aa512c575e357c7b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8563868549535859361, guid: 527eac38869f2ee4aa512c575e357c7b,
         type: 3}
@@ -199,6 +204,12 @@ PrefabInstance:
 --- !u!4 &650876933337940365 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8563868549535859361, guid: 527eac38869f2ee4aa512c575e357c7b,
+    type: 3}
+  m_PrefabInstance: {fileID: 9210028423234388780}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3211643028479932348 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5999520778008458384, guid: 527eac38869f2ee4aa512c575e357c7b,
     type: 3}
   m_PrefabInstance: {fileID: 9210028423234388780}
   m_PrefabAsset: {fileID: 0}

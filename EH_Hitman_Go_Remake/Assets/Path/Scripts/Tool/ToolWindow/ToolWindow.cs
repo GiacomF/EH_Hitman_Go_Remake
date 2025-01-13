@@ -42,6 +42,7 @@ public class ToolWindow : EditorWindow
         generationPosition = myMap.transform.position;
         // Aggiungi o ottieni il componente Collector
         myCollector = myMap.GetComponent<Collector>() ?? myMap.AddComponent<Collector>();
+        myCollector = myMap.GetComponent<Collector>();
 
         // Gestisci la creazione dei container (StepsContainer e ConnectionsContainer)
         myStepsContainer = EnsureContainer("StepsContainer");
