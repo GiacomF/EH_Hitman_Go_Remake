@@ -2,54 +2,6 @@
     "name": "Input_Actions",
     "maps": [
         {
-            "name": "MapEditor",
-            "id": "cd2b04d9-5207-4361-a09a-e814bb2a79fd",
-            "actions": [
-                {
-                    "name": "SelectNode",
-                    "type": "Button",
-                    "id": "ae424ebf-1785-4da2-aa14-28b8c39bacd3",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "DeselectNode",
-                    "type": "Button",
-                    "id": "393f1454-e2e3-4dc7-b5ec-bed9cdabd79b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "8a42e3ea-a735-4c35-b1c8-f61a6c654085",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "SelectNode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bfaf7f02-afb5-4c6a-97ac-bacacfbeaf6a",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Keyboard and Mouse",
-                    "action": "DeselectNode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "Gameplay",
             "id": "82b94e66-6ead-4fb8-b358-0b8c0eaf9a64",
             "actions": [

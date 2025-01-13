@@ -17,6 +17,12 @@ public class Step : MonoBehaviour
     }
 
     public StepInfo myStepInfo;
+    public GameObject myMistObj;
+
+    private void CheckisMist()
+    {
+        myMistObj.SetActive(myStepInfo.isMist);
+    }
 
     public void SetTrapdoorConnection(Step connection)
     {
@@ -42,6 +48,7 @@ public class Step : MonoBehaviour
         Event e = Event.current;
 
         CheckisTrapdoor();
+        CheckisMist();
     }
 
     private void OnEnable ()

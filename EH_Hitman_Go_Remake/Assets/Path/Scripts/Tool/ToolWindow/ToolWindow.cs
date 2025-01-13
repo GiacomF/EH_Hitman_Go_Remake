@@ -75,6 +75,7 @@ public class ToolWindow : EditorWindow
 
         GameObject newStep = Instantiate(StepPrefab, generationPosition, Quaternion.identity, myStepsContainer.transform);
         Step newStepComponent = newStep.GetComponent<Step>();
+        newStepComponent.myMistObj = newStep.transform.Find("Mist").gameObject;
         newStep.name = $"Step {StepIndex}";
         newStepComponent.myStepInfo.myIndex = StepIndex;
             
@@ -120,6 +121,17 @@ public class ToolWindow : EditorWindow
             OriginStep.myStepInfo.TrapdoorConnection = trapdoorConnection;
             OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = OriginStep;
         }
+    }
+
+    private bool isMist = false;
+    private void SetisMist()
+    {
+        isMist = EditorGUILayout.Toggle("Is this node Mist", isMist);
+        
+        if(OriginStep != null)
+        {
+            OriginStep.myStepInfo.isMist = isMist;
+        }
     } 
 
     private void OnIsEnabled()
@@ -160,12 +172,16 @@ public class ToolWindow : EditorWindow
         GUILayout.Label("Generated Steps :", EditorStyles.boldLabel);
         GUILayout.Label(generatedSteps.Count.ToString(), EditorStyles.boldLabel);
         
-        GUILayout.Label("Origin Step Info", EditorStyles.boldLabel);
+        GUILayout.Label("Origin Step Setup", EditorStyles.boldLabel);
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Step to Connect", EditorStyles.boldLabel);
         trapdoorConnection = (Step)EditorGUILayout.ObjectField(trapdoorConnection, typeof(Step), true);
-        if(GUILayout.Button("Establish Trapdoor Connection"))
+        if(GUILayout.Button("Set Trapdoor Connection"))
         {
             SetTrapdoorConnection();
         }
+
+        SetisMist();
 
         if(GUILayout.Button("Clear"))
         {
