@@ -43,6 +43,6 @@ public class Connection: MonoBehaviour
 
     private void OnDisable()
     {
-        SceneView.duringSceneGui += UpdateConnection;
+        SceneView.duringSceneGui -= UpdateConnection;
     }
 }

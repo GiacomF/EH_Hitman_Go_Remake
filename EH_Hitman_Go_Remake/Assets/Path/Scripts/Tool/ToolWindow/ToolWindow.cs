@@ -30,6 +30,7 @@ public class ToolWindow : EditorWindow
     public Step OriginStep = null;
     public Step DestinationStep = null;
 
+    //Into Initialize goes any check to control the possibility of generation, assignement and correct functioning of the Tool
     public GameObject myMap;
     private GameObject myStepsContainer;
     private GameObject myConnectionsContainer; 
@@ -63,8 +64,6 @@ public class ToolWindow : EditorWindow
         return containerTransform.gameObject;  // Restituisci il contenitore esistente
     }
 
-    public GameObject ConnectionPrefab;
-    private List<GameObject> connections = new List<GameObject>();
     private Vector3 generationPosition;
     public Vector3 yOffset = new Vector3(0, 0.5f, 0);
     private void CreateStep()
@@ -77,7 +76,7 @@ public class ToolWindow : EditorWindow
         GameObject newStep = Instantiate(StepPrefab, generationPosition, Quaternion.identity, myStepsContainer.transform);
         Step newStepComponent = newStep.GetComponent<Step>();
         newStep.name = $"Step {StepIndex}";
-        newStepComponent.myIndex = StepIndex;
+        newStepComponent.myStepInfo.myIndex = StepIndex;
             
         generatedSteps.Add(newStep);
 
@@ -92,6 +91,8 @@ public class ToolWindow : EditorWindow
         StepIndex++;
     }
 
+    public GameObject ConnectionPrefab;
+    private List<GameObject> connections = new List<GameObject>();
     private void CreateConnection(GameObject Origin, GameObject Destination)
     {
         GameObject newObj = Instantiate(ConnectionPrefab, myConnectionsContainer.transform);
@@ -99,11 +100,26 @@ public class ToolWindow : EditorWindow
 
         Step originStep = Origin.GetComponent<Step>();
         Step destinationStep = Destination.GetComponent<Step>();
-        originStep.Connections.Add(destinationStep);
-        destinationStep.Connections.Add(originStep);
+        originStep.myStepInfo.Connections.Add(destinationStep);
+        destinationStep.myStepInfo.Connections.Add(originStep);
 
         Connection newConnection = newObj.AddComponent<Connection>();
         newConnection.Initialize(Origin, Destination);
+    }
+
+    private Step trapdoorConnection;
+    private void SetTrapdoorConnection()
+    {
+        if(trapdoorConnection == null)
+        {
+            OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = trapdoorConnection;
+            OriginStep.myStepInfo.TrapdoorConnection = trapdoorConnection;
+        }
+        else
+        {
+            OriginStep.myStepInfo.TrapdoorConnection = trapdoorConnection;
+            OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = OriginStep;
+        }
     } 
 
     private void OnIsEnabled()
@@ -143,6 +159,14 @@ public class ToolWindow : EditorWindow
 
         GUILayout.Label("Generated Steps :", EditorStyles.boldLabel);
         GUILayout.Label(generatedSteps.Count.ToString(), EditorStyles.boldLabel);
+        
+        GUILayout.Label("Origin Step Info", EditorStyles.boldLabel);
+        trapdoorConnection = (Step)EditorGUILayout.ObjectField(trapdoorConnection, typeof(Step), true);
+        if(GUILayout.Button("Establish Trapdoor Connection"))
+        {
+            SetTrapdoorConnection();
+        }
+
         if(GUILayout.Button("Clear"))
         {
             if(generatedSteps.Count != 0)
