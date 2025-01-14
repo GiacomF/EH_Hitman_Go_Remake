@@ -397,10 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00043250a9c4e1c47927109910bbca29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepsCollected:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  stepsCollected: []
 --- !u!1 &2123723672
 GameObject:
   m_ObjectHideFlags: 0

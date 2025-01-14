@@ -23,7 +23,7 @@ public class ToolWindow : EditorWindow
         }
     }
 
-    public GameObject StepPrefab;
+    private GameObject StepPrefab;
     public List<GameObject> generatedSteps = new List<GameObject>();
     private bool isEnabled = false;
     public int StepIndex = 0;
@@ -31,38 +31,56 @@ public class ToolWindow : EditorWindow
     public Step DestinationStep = null;
 
     //Into Initialize goes any check to control the possibility of generation, assignement and correct functioning of the Tool
-    public GameObject myMap;
+    private GameObject myMap;
     private GameObject myStepsContainer;
     private GameObject myConnectionsContainer; 
     private Collector myCollector;
+
+    private GameObject FindGameObjectWithComponent<T>() where T : Component
+    {
+        T component = FindObjectOfType<T>();
+        return component != null ? component.gameObject : null;
+    }
+
+    private void LoadPrefabs()
+    {
+        StepPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Path/Prefabs/StepPrefab.prefab");
+        ConnectionPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Path/Prefabs/Connection.prefab");
+
+        Debug.Log(StepPrefab, ConnectionPrefab);
+    }
+
     private void Initialize()
     {
-        if (myMap == null) return;  // Verifica se myMap è null, se sì esci dalla funzione
+        LoadPrefabs();
 
-        generationPosition = myMap.transform.position;
-        // Aggiungi o ottieni il componente Collector
-        myCollector = myMap.GetComponent<Collector>() ?? myMap.AddComponent<Collector>();
-        myCollector = myMap.GetComponent<Collector>();
+        myMap = FindGameObjectWithComponent<Collector>();
+        Debug.Log(myMap);
 
-        // Gestisci la creazione dei container (StepsContainer e ConnectionsContainer)
-        myStepsContainer = EnsureContainer("StepsContainer");
-        myConnectionsContainer = EnsureContainer("ConnectionsContainer");
+        if (myMap != null)
+        {
+            generationPosition = myMap.transform.position;
+            
+            myCollector = myMap.GetComponent<Collector>() ?? myMap.AddComponent<Collector>();
+            myCollector = myMap.GetComponent<Collector>();
+
+            myStepsContainer = EnsureContainer("StepsContainer");
+            myConnectionsContainer = EnsureContainer("ConnectionsContainer");
+        }
     }
 
     private GameObject EnsureContainer(string containerName)
     {
-        // Cerca il container già esistente
         Transform containerTransform = myMap.transform.Find(containerName);
         
-        // Se non esiste, crea un nuovo contenitore
         if (containerTransform == null)
         {
             GameObject container = new GameObject(containerName);
-            container.transform.SetParent(myMap.transform);  // Imposta il parent al mio oggetto map
+            container.transform.SetParent(myMap.transform);
             return container;
         }
         
-        return containerTransform.gameObject;  // Restituisci il contenitore esistente
+        return containerTransform.gameObject;
     }
 
     private Vector3 generationPosition;
@@ -93,7 +111,7 @@ public class ToolWindow : EditorWindow
         StepIndex++;
     }
 
-    public GameObject ConnectionPrefab;
+    private GameObject ConnectionPrefab;
     private List<GameObject> connections = new List<GameObject>();
     private void CreateConnection(GameObject Origin, GameObject Destination)
     {
@@ -109,17 +127,16 @@ public class ToolWindow : EditorWindow
         newConnection.Initialize(Origin, Destination);
     }
 
-    private Step trapdoorConnection;
     private void SetTrapdoorConnection()
     {
-        if(trapdoorConnection == null)
+        if(DestinationStep == null)
         {
-            OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = trapdoorConnection;
-            OriginStep.myStepInfo.TrapdoorConnection = trapdoorConnection;
+            OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = DestinationStep;
+            OriginStep.myStepInfo.TrapdoorConnection = DestinationStep;
         }
         else
         {
-            OriginStep.myStepInfo.TrapdoorConnection = trapdoorConnection;
+            OriginStep.myStepInfo.TrapdoorConnection = DestinationStep;
             OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = OriginStep;
         }
     }
@@ -140,13 +157,6 @@ public class ToolWindow : EditorWindow
         
         GUILayout.Label(promptMessage, EditorStyles.boldLabel);
 
-        GUILayout.Label("Step Prefab", EditorStyles.boldLabel);    
-        StepPrefab = (GameObject)EditorGUILayout.ObjectField(StepPrefab, typeof(GameObject), true);
-        GUILayout.Label("Connection Prefab", EditorStyles.boldLabel);
-        ConnectionPrefab = (GameObject)EditorGUILayout.ObjectField(ConnectionPrefab, typeof(GameObject), true);
-
-        GUILayout.Label("Map Selected", EditorStyles.boldLabel);
-        myMap = (GameObject)EditorGUILayout.ObjectField(myMap, typeof(GameObject), true);
         GUILayout.Label("Origin Step", EditorStyles.boldLabel);
         OriginStep = (Step)EditorGUILayout.ObjectField(OriginStep, typeof(Step), true);
         GUILayout.Label("Destination Step", EditorStyles.boldLabel);
@@ -173,10 +183,8 @@ public class ToolWindow : EditorWindow
         GUILayout.Label("Generated Steps :", EditorStyles.boldLabel);
         GUILayout.Label(generatedSteps.Count.ToString(), EditorStyles.boldLabel);
         
-        GUILayout.Label("Origin Step Setup", EditorStyles.boldLabel);
         GUILayout.Label("", EditorStyles.boldLabel);
-        GUILayout.Label("Step to Connect", EditorStyles.boldLabel);
-        trapdoorConnection = (Step)EditorGUILayout.ObjectField(trapdoorConnection, typeof(Step), true);
+        GUILayout.Label("Connect DestiantionStep using Trapdoor Connection", EditorStyles.boldLabel);
         if(GUILayout.Button("Set Trapdoor Connection"))
         {
             SetTrapdoorConnection();
@@ -237,7 +245,5 @@ public class ToolWindow : EditorWindow
     {
         SceneView.duringSceneGui -= OnSceneGuiInstructions;
         myCollector = null;
-
-        //Destroy Preview
     }
 }
