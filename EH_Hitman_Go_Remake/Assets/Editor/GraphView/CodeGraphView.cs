@@ -37,11 +37,13 @@ namespace CodeGraph.Editor
             GridBackground background =  new GridBackground();
             background.name = "Grid";
             Add(background);
+            background.SendToBack();
 
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new ClickSelector());
+            this.AddManipulator(new ContentZoomer());
         }
 
         public void Add(CodeGraphNode node)
@@ -56,7 +58,7 @@ namespace CodeGraph.Editor
         private void AddNodeToGraph(CodeGraphNode node)
         {
             node.typeName = node.GetType().AssemblyQualifiedName;
-            CodeGraphEditorNode editorNode = new CodeGraphEditorNode();
+            CodeGraphEditorNode editorNode = new CodeGraphEditorNode(node);
             editorNode.SetPosition(node.position);
             m_graphNodes.Add(editorNode);
             m_nodeDictionary.Add(node.id, editorNode);
