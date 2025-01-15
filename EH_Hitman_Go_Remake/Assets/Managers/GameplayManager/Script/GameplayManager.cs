@@ -2,8 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class GameplayManager : MonoBehaviour
+public class GameplayManager : Singleton<GameplayManager>
 {
+    public enum Turn
+    {
+        Player,
+        Enemies
+    }
+
     public GameObject Player;
     public Transform startPosition;
     private float yOffset;
@@ -13,6 +19,24 @@ public class GameplayManager : MonoBehaviour
     public List<Step> StepsInMap;
     public LayerMask InteractableLayer;
     public float AnimationMoveDuration;
+
+    public List<Entity> m_foundEntities;
+    public void RegisterEntity(Entity entity)
+    {
+        m_foundEntities.Add(entity);
+    }
+
+    public void UnregisterEntity(Entity entity)
+    {
+        m_foundEntities.Remove(entity);
+    }
+
+    [SerializeField]
+    private Entity m_currentEntity;
+    private void CicleThroughEntities()
+    {
+
+    }
 
     private void RotateEntity(GameObject entity, Transform destination)
     {
@@ -59,8 +83,15 @@ public class GameplayManager : MonoBehaviour
 
     private void Initialize()
     {
-        yOffset = Player.transform.localScale.y;
-        Player.transform.position = startPosition.position + new Vector3(0, yOffset, 0);
+        if(Player != null)
+        {
+            yOffset = Player.transform.localScale.y;
+        }
+
+        if(startPosition != null)
+        {
+            Player.transform.position = startPosition.position + new Vector3(0, yOffset, 0);
+        }
 
         if(FindCollector())
         {
