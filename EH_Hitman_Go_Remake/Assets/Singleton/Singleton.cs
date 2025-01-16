@@ -24,7 +24,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    protected virtual void Awake()
+    /*protected virtual void Awake()
     {
         if( _instance != null && _instance != this)
         {
@@ -36,4 +36,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
+    */
+    
 }
