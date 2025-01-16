@@ -23,18 +23,12 @@ public class ToolWindow : EditorWindow
         }
     }
 
-    private GameObject StepPrefab;
-    public List<GameObject> generatedSteps = new List<GameObject>();
     private bool isEnabled = false;
     public int StepIndex = 0;
     public Step OriginStep = null;
     public Step DestinationStep = null;
 
     //Into Initialize goes any check to control the possibility of generation, assignement and correct functioning of the Tool
-    private GameObject myMap;
-    private GameObject myStepsContainer;
-    private GameObject myConnectionsContainer; 
-    private Collector myCollector;
 
     private GameObject FindGameObjectWithComponent<T>() where T : Component
     {
@@ -42,14 +36,20 @@ public class ToolWindow : EditorWindow
         return component != null ? component.gameObject : null;
     }
 
+    private GameObject StepPrefab;
+    private GameObject ConnectionPrefab;
+    private GameObject EntityPrefab;
     private void LoadPrefabs()
     {
         StepPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Path/Prefabs/StepPrefab.prefab");
         ConnectionPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Path/Prefabs/Connection.prefab");
-
-        Debug.Log(StepPrefab, ConnectionPrefab);
+        EntityPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Entities/Prefab/Enemy.prefab");
     }
 
+    private GameObject myMap;
+    private GameObject myStepsContainer;
+    private GameObject myConnectionsContainer; 
+    private Collector myCollector;
     private void Initialize()
     {
         LoadPrefabs();
@@ -83,6 +83,7 @@ public class ToolWindow : EditorWindow
         return containerTransform.gameObject;
     }
 
+    public List<GameObject> generatedSteps = new List<GameObject>();
     private Vector3 generationPosition;
     public Vector3 yOffset = new Vector3(0, 0.5f, 0);
     private void CreateStep()
@@ -111,7 +112,6 @@ public class ToolWindow : EditorWindow
         StepIndex++;
     }
 
-    private GameObject ConnectionPrefab;
     private List<GameObject> connections = new List<GameObject>();
     private void CreateConnection(GameObject Origin, GameObject Destination)
     {
