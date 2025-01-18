@@ -10,8 +10,10 @@ public class GameplayManager : Singleton<GameplayManager>
         Enemies
     }
 
+    public Turn m_currentTurn;
     public GameObject Player;
     public Transform startPosition;
+    public Transform entityStartingPosition;
     private float yOffset;
 
     private GameObject myMap;
@@ -31,11 +33,25 @@ public class GameplayManager : Singleton<GameplayManager>
         m_foundEntities.Remove(entity);
     }
 
+    private void ExecuteBehaviour(Entity entity)
+    {
+        /*if(entity.m_entityBehaviour == Entity.EntityBehaviour.Patrol)
+        {
+            MoveTowardsWithDOTween(entity, )
+        }*/
+    }
+
     [SerializeField]
     private Entity m_currentEntity;
     private void CicleThroughEntities()
     {
+        int entitiesFound = m_foundEntities.Count;
+        for (int i = 0; i < entitiesFound; i++)
+        {
+            ExecuteBehaviour(m_foundEntities[i]);
+        }
 
+        m_currentTurn = Turn.Player;
     }
 
     private void RotateEntity(GameObject entity, Transform destination)
@@ -51,14 +67,19 @@ public class GameplayManager : Singleton<GameplayManager>
 
     public void OnInteraction()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity, InteractableLayer))
+        if(m_currentTurn == Turn.Player)
         {
-            GameObject selectedObject = hit.collider.gameObject;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity, InteractableLayer))
+            {
+                GameObject selectedObject = hit.collider.gameObject;
 
-            MoveTowardsWithDOTween(Player, selectedObject.transform);
+                MoveTowardsWithDOTween(Player, selectedObject.transform);
+
+                m_currentTurn = Turn.Enemies;
+            }
         }
     }
 
@@ -83,6 +104,11 @@ public class GameplayManager : Singleton<GameplayManager>
 
     private void Initialize()
     {
+        if(FindCollector())
+        {
+            StepsInMap = myCollector.stepsCollected;
+        }
+
         if(Player != null)
         {
             yOffset = Player.transform.localScale.y;
@@ -93,9 +119,17 @@ public class GameplayManager : Singleton<GameplayManager>
             Player.transform.position = startPosition.position + new Vector3(0, yOffset, 0);
         }
 
-        if(FindCollector())
+        if(m_foundEntities.Count != 0)
         {
-            StepsInMap = myCollector.stepsCollected;
+            foreach(Entity e in m_foundEntities)
+            {
+                e.gameObject.transform.position = entityStartingPosition.position + new Vector3(0, yOffset, 0);
+            }
+        }
+
+        if(m_currentTurn == Turn.Enemies)
+        {
+            CicleThroughEntities();
         }
     }
 

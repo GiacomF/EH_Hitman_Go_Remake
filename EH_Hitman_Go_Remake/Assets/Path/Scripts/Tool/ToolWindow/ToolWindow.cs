@@ -142,7 +142,7 @@ public class ToolWindow : EditorWindow
     }
 
     private bool isMist = false;
-    private void SetisMist()
+    private void SetIsMist()
     {
         isMist = EditorGUILayout.Toggle("Is this node Mist", isMist);
         
@@ -154,6 +154,9 @@ public class ToolWindow : EditorWindow
 
     private void OnIsEnabled()
     {
+        if(!isEnabled) return;
+
+        SceneView.duringSceneGui += OnSceneGuiInstructions;
         
         GUILayout.Label(promptMessage, EditorStyles.boldLabel);
 
@@ -190,7 +193,7 @@ public class ToolWindow : EditorWindow
             SetTrapdoorConnection();
         }
 
-        SetisMist();
+        SetIsMist();
 
         if(GUILayout.Button("Clear"))
         {
@@ -220,25 +223,24 @@ public class ToolWindow : EditorWindow
         }
     }
 
+    private void EnableButtonFunc()
+    {
+        if(GUILayout.Button(isEnabled ? "Tool Off" : "Tool On"))
+        {
+            isEnabled = !isEnabled;
+
+            //As a safe measure, deactivates the Instructions whatever the case
+            SceneView.duringSceneGui -= OnSceneGuiInstructions;
+        }
+    }
+
     private void OnGUI()
     {
         GUILayout.Label("", EditorStyles.boldLabel);
 
-        if(isEnabled)
-        {
-            OnIsEnabled();
-        }
+        OnIsEnabled();
 
-        if(GUILayout.Button(isEnabled ? "Tool Off" : "Tool On"))
-        {
-            isEnabled = !isEnabled;
-            SceneView.duringSceneGui -= OnSceneGuiInstructions;
-
-            if(isEnabled)
-            {
-                SceneView.duringSceneGui += OnSceneGuiInstructions;
-            }
-        }
+        EnableButtonFunc();
     }
 
     private void OnDisable()
