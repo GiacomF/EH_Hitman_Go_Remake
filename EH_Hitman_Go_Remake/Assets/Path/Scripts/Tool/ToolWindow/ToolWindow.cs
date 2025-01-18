@@ -19,7 +19,7 @@ public class ToolWindow : EditorWindow
         {
             case 0: promptMessage = "Hello! Click Generate Step to Start!"; break;
 
-            case >0: promptMessage = "Connect next Step..."; break;
+            case >0: promptMessage = "Generate new Step or drag a Step into Destination Step to connect existing nodes"; break;
         }
     }
 
@@ -152,18 +152,27 @@ public class ToolWindow : EditorWindow
         }
     } 
 
-    private void OnIsEnabled()
+    private void ActivateInstructions()
     {
-        if(!isEnabled) return;
-
         SceneView.duringSceneGui += OnSceneGuiInstructions;
-        
         GUILayout.Label(promptMessage, EditorStyles.boldLabel);
+    }
 
+    private void PlaceMenuSpacer()
+    {
+        GUILayout.Label("", EditorStyles.boldLabel);
+    }
+
+    private void UpdateOriginAndDestination()
+    {
         GUILayout.Label("Origin Step", EditorStyles.boldLabel);
         OriginStep = (Step)EditorGUILayout.ObjectField(OriginStep, typeof(Step), true);
         GUILayout.Label("Destination Step", EditorStyles.boldLabel);
         DestinationStep = (Step)EditorGUILayout.ObjectField(DestinationStep, typeof(Step), true);
+    }
+
+    private void CreateConnectionButtonFunc()
+    {
         if(GUILayout.Button("Create Connection"))
         {   
             Initialize();
@@ -182,45 +191,81 @@ public class ToolWindow : EditorWindow
 
             DestinationStep = null;
         }
+    }
 
+    private void TrackGenerationIndex()
+    {
         GUILayout.Label("Generated Steps :", EditorStyles.boldLabel);
         GUILayout.Label(generatedSteps.Count.ToString(), EditorStyles.boldLabel);
-        
-        GUILayout.Label("", EditorStyles.boldLabel);
+    }
+
+    private void TrapdoorButtonFunc()
+    {
         GUILayout.Label("Connect DestiantionStep using Trapdoor Connection", EditorStyles.boldLabel);
         if(GUILayout.Button("Set Trapdoor Connection"))
         {
             SetTrapdoorConnection();
         }
+    }
 
+    private void ResetTool()
+    {
+        if(generatedSteps.Count != 0)
+        {
+            foreach(GameObject step in generatedSteps)
+            {
+                DestroyImmediate(step);
+            }
+        }
+
+        foreach(GameObject connection in connections)
+        {
+            DestroyImmediate(connection);
+        }
+
+        if(myCollector != null && myCollector.stepsCollected.Count != 0)
+        {
+            myCollector.stepsCollected.Clear();
+        }
+
+        connections.Clear();
+        generatedSteps.Clear();
+        StepIndex = 0;
+        DestinationStep = null;
+        generationPosition = Vector3.zero;
+    }
+
+    private void ResetButtonFunc()
+    {
+        if(GUILayout.Button("ResetTool"))
+        {
+            ResetTool();
+        }
+    }
+
+    private void OnIsEnabled()
+    {
+        if(!isEnabled) return;
+
+        ActivateInstructions();
+
+        //Menu spacer
+        PlaceMenuSpacer();
+
+        UpdateOriginAndDestination();
+
+        CreateConnectionButtonFunc();
+
+        TrackGenerationIndex();
+
+        //Menu spacer
+        PlaceMenuSpacer();
+
+        TrapdoorButtonFunc();
+        
         SetIsMist();
 
-        if(GUILayout.Button("Clear"))
-        {
-            if(generatedSteps.Count != 0)
-            {
-                foreach(GameObject step in generatedSteps)
-                {
-                    DestroyImmediate(step);
-                }
-            }
-
-            foreach(GameObject connection in connections)
-            {
-                DestroyImmediate(connection);
-            }
-
-            if(myCollector != null && myCollector.stepsCollected.Count != 0)
-            {
-                myCollector.stepsCollected.Clear();
-            }
-
-            connections.Clear();
-            generatedSteps.Clear();
-            StepIndex = 0;
-            DestinationStep = null;
-            generationPosition = Vector3.zero;
-        }
+        ResetButtonFunc();
     }
 
     private void EnableButtonFunc()
@@ -236,8 +281,6 @@ public class ToolWindow : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("", EditorStyles.boldLabel);
-
         OnIsEnabled();
 
         EnableButtonFunc();
