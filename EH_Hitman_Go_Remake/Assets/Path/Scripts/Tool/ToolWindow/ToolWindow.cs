@@ -23,11 +23,6 @@ public class ToolWindow : EditorWindow
         }
     }
 
-    private bool isEnabled = false;
-    public int StepIndex = 0;
-    public Step OriginStep = null;
-    public Step DestinationStep = null;
-
     //Into Initialize goes any check to control the possibility of generation, assignement and correct functioning of the Tool
 
     private GameObject FindGameObjectWithComponent<T>() where T : Component
@@ -55,7 +50,6 @@ public class ToolWindow : EditorWindow
         LoadPrefabs();
 
         myMap = FindGameObjectWithComponent<Collector>();
-        Debug.Log(myMap);
 
         if (myMap != null)
         {
@@ -82,7 +76,9 @@ public class ToolWindow : EditorWindow
         
         return containerTransform.gameObject;
     }
-
+    
+    public Step OriginStep = null;
+    public int StepIndex = 0;
     public List<GameObject> generatedSteps = new List<GameObject>();
     private Vector3 generationPosition;
     public Vector3 yOffset = new Vector3(0, 0.5f, 0);
@@ -127,31 +123,6 @@ public class ToolWindow : EditorWindow
         newConnection.Initialize(Origin, Destination);
     }
 
-    private void SetTrapdoorConnection()
-    {
-        if(DestinationStep == null)
-        {
-            OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = DestinationStep;
-            OriginStep.myStepInfo.TrapdoorConnection = DestinationStep;
-        }
-        else
-        {
-            OriginStep.myStepInfo.TrapdoorConnection = DestinationStep;
-            OriginStep.myStepInfo.TrapdoorConnection.myStepInfo.TrapdoorConnection = OriginStep;
-        }
-    }
-
-    private bool isMist = false;
-    private void SetIsMist()
-    {
-        isMist = EditorGUILayout.Toggle("Is this node Mist", isMist);
-        
-        if(OriginStep != null)
-        {
-            OriginStep.myStepInfo.isMist = isMist;
-        }
-    } 
-
     private void ActivateInstructions()
     {
         SceneView.duringSceneGui += OnSceneGuiInstructions;
@@ -165,18 +136,23 @@ public class ToolWindow : EditorWindow
 
     private void UpdateOriginAndDestination()
     {
+        GUILayout.BeginVertical("box");
         GUILayout.Label("Origin Step", EditorStyles.boldLabel);
         OriginStep = (Step)EditorGUILayout.ObjectField(OriginStep, typeof(Step), true);
         GUILayout.Label("Destination Step", EditorStyles.boldLabel);
         DestinationStep = (Step)EditorGUILayout.ObjectField(DestinationStep, typeof(Step), true);
+
+        PlaceMenuSpacer();
+
+        GUILayout.Label("Origin is data source, Destination is operations subject", EditorStyles.wordWrappedLabel);
+        
+        GUILayout.EndVertical();
     }
 
     private void CreateConnectionButtonFunc()
     {
         if(GUILayout.Button("Create Connection"))
         {   
-            Initialize();
-
             if(myCollector != null)
             {
                 if(DestinationStep == null)
@@ -199,6 +175,29 @@ public class ToolWindow : EditorWindow
         GUILayout.Label(generatedSteps.Count.ToString(), EditorStyles.boldLabel);
     }
 
+    private void SetIsMist()
+    {
+        if(GUILayout.Button("Place Mist"))
+        {
+            OriginStep.myStepInfo.isMist = !OriginStep.myStepInfo.isMist;
+        }
+    }
+    
+    public Step DestinationStep = null;
+    private void SetTrapdoorConnection()
+    {
+        if(DestinationStep == null)
+        {
+            OriginStep.TrapdoorConnection.TrapdoorConnection = DestinationStep;
+            OriginStep.TrapdoorConnection = DestinationStep;
+        }
+        else
+        {
+            OriginStep.TrapdoorConnection = DestinationStep;
+            OriginStep.TrapdoorConnection.TrapdoorConnection = OriginStep;
+        }
+    }
+
     private void TrapdoorButtonFunc()
     {
         GUILayout.Label("Connect DestiantionStep using Trapdoor Connection", EditorStyles.boldLabel);
@@ -206,6 +205,19 @@ public class ToolWindow : EditorWindow
         {
             SetTrapdoorConnection();
         }
+    }
+
+    SerializedObject serializedStep;
+    private void ViewStepInfo()
+    {
+        if(OriginStep == null) return;
+
+        serializedStep = new SerializedObject(OriginStep);
+
+        serializedStep.Update(); 
+        GUILayout.Label("View Origin Step Info", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(serializedStep.FindProperty("myStepInfo"), true); 
+        serializedStep.ApplyModifiedProperties(); 
     }
 
     private void ResetTool()
@@ -243,27 +255,39 @@ public class ToolWindow : EditorWindow
         }
     }
 
+    private bool isEnabled = false;
     private void OnIsEnabled()
     {
         if(!isEnabled) return;
+
+        Initialize();
 
         ActivateInstructions();
 
         //Menu spacer
         PlaceMenuSpacer();
 
+        GUILayout.BeginHorizontal();
+
         UpdateOriginAndDestination();
 
-        CreateConnectionButtonFunc();
+        GUILayout.BeginVertical("box");
 
         TrackGenerationIndex();
+
+        CreateConnectionButtonFunc();
 
         //Menu spacer
         PlaceMenuSpacer();
 
-        TrapdoorButtonFunc();
-        
+        /*ViewStepInfo();*/
         SetIsMist();
+
+        TrapdoorButtonFunc();
+
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
 
         ResetButtonFunc();
     }
