@@ -18,7 +18,8 @@ public class Step : MonoBehaviour
     public Step TrapdoorConnection;
     public ViewStepInfo myStepInfo;
     public GameObject myMistObj;
-    public Entity myEntity;
+    public Entity.EntityBehaviour myEntityBehaviour;
+    public Step myEntityDirection;
     private void CheckisMist()
     {
         myMistObj.SetActive(myStepInfo.isMist);

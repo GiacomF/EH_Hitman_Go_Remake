@@ -4,6 +4,8 @@ public class Entity : MonoBehaviour
 {
     public enum EntityBehaviour
     {
+        None,
+        Player,
         Guard,
         Sentinel,
         Patrol,

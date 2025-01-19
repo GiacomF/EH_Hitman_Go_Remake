@@ -139,6 +139,7 @@ public class ToolWindow : EditorWindow
         GUILayout.BeginVertical("box");
         GUILayout.Label("Origin Step", EditorStyles.boldLabel);
         OriginStep = (Step)EditorGUILayout.ObjectField(OriginStep, typeof(Step), true);
+
         GUILayout.Label("Destination Step", EditorStyles.boldLabel);
         DestinationStep = (Step)EditorGUILayout.ObjectField(DestinationStep, typeof(Step), true);
 
@@ -205,6 +206,49 @@ public class ToolWindow : EditorWindow
         {
             SetTrapdoorConnection();
         }
+    }
+
+    private void SetEntityDirection()
+    {
+        if(OriginStep.myStepInfo.Connections.Count != 0)
+        {
+            if(OriginStep.myEntityDirection == null)
+            {
+                OriginStep.myEntityDirection = OriginStep.myStepInfo.Connections[0];
+            } 
+            else
+            {
+                int currentIndex = OriginStep.myStepInfo.Connections.IndexOf(OriginStep.myEntityDirection);
+
+                if (currentIndex == -1)
+                {
+                    OriginStep.myEntityDirection = OriginStep.myStepInfo.Connections[0];
+                }
+                else
+                {
+                    int nextIndex = (currentIndex + 1) % OriginStep.myStepInfo.Connections.Count;
+                    OriginStep.myEntityDirection = OriginStep.myStepInfo.Connections[nextIndex];
+                }
+            }
+        }
+    }
+
+    public Entity.EntityBehaviour myBehaviourSet;
+    private void SetEntityButtonFunc()
+    {
+        if(GUILayout.Button("Set Entity"))
+        {
+            if(myBehaviourSet == Entity.EntityBehaviour.None)
+            {
+                OriginStep.myEntityBehaviour = Entity.EntityBehaviour.None; OriginStep.myEntityDirection = null;
+            }
+            else
+            {
+                OriginStep.myEntityBehaviour = myBehaviourSet;
+                SetEntityDirection();
+            } 
+        }
+        myBehaviourSet = (Entity.EntityBehaviour)EditorGUILayout.EnumPopup(myBehaviourSet);
     }
 
     SerializedObject serializedStep;
@@ -284,6 +328,8 @@ public class ToolWindow : EditorWindow
         SetIsMist();
 
         TrapdoorButtonFunc();
+
+        SetEntityButtonFunc();
 
         GUILayout.EndVertical();
 
