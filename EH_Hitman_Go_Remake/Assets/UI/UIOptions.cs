@@ -6,9 +6,7 @@ using UnityEngine.UI;
 
 public class UIOptions : GameUI
 {
-
     [SerializeField] private Button returnButton;
-    [SerializeField] private Button bindingsButton;
 
     [SerializeField] private GameObject musicPanel;
     [SerializeField] private GameObject sfxPanel;
@@ -18,19 +16,12 @@ public class UIOptions : GameUI
     protected void Start()
     {
         returnButton.onClick.AddListener(OnReturnClick);
-        bindingsButton.onClick.AddListener(OnBindingsClick);
-
-    }
-
-    void Update()
-    {
-        
     }
 
     public override void SetActive(bool active, Action action = null)
     {
         base.SetActive(active, action);
-        if (action != null) 
+        if (action != null)
         {
             returnFunc = action;
         }
@@ -40,9 +31,14 @@ public class UIOptions : GameUI
         returnFunc?.Invoke();
     }
 
-    private void OnBindingsClick()
+    public void OnMusicVolumeChange(float value)
     {
-        UIManager.Instance.ShowUI(UIManager.GameUIType.Bindings);
+        //SoundMixerManager.Instance.SetMusicVolume(value);
+    }
+
+    public void OnSoundFXVolumeChange(float value)
+    {
+        //SoundMixerManager.Instance.SetSoundFXVolume(value);
     }
 
 }

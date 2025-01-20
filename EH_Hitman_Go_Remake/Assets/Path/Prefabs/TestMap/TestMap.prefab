@@ -797,6 +797,7 @@ GameObject:
   - component: {fileID: 1873630072233136012}
   - component: {fileID: 4391568380369868370}
   - component: {fileID: 4545757740016087189}
+  - component: {fileID: 8483470005899666851}
   m_Layer: 0
   m_Name: TestMap
   m_TagString: Untagged
@@ -894,6 +895,19 @@ MonoBehaviour:
   - {fileID: 2340512956810368757}
   - {fileID: 1222968522845118366}
   - {fileID: 664565973755898038}
+--- !u!114 &8483470005899666851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595533120132363104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463b9737e6f8a764593af7a8674f1c9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSpawn: {fileID: 748817831136540770}
 --- !u!1 &1749993928025323726
 GameObject:
   m_ObjectHideFlags: 0

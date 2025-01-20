@@ -11,17 +11,16 @@ public class GSGameplay : IGameState
         if (!LevelManager.Instance.isLevelStarted)
         {
             LevelManager.Instance.LoadLevel();
-
         }
     }
 
     public void OnStateUpdate() 
     {
-        /*if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             GameStateManager.Instance.SetCurrentGameState(GameStateManager.GameStates.Pause);
         }
-        */
+        
     }
 
     public void OnStateExit() { }

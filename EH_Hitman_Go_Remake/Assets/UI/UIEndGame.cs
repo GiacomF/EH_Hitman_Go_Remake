@@ -1,25 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class UIEndGame : GameUI
 {
     public Button menuButton;
     public Button playAgainButton;
-    public TMP_Text points;
-    // Start is called before the first frame update
+    //public TMP_Text points;
+    
     void Start()
     {
         menuButton.onClick.AddListener(OnMenuClick);
         playAgainButton.onClick.AddListener(OnPlayAgainClick);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void OnMenuClick()

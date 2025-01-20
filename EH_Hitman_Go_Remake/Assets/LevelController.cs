@@ -9,7 +9,7 @@ public class LevelController : MonoBehaviour
     
     public void StartLevel()
     {
-        LevelManager.Instance.playerInstance = GameObject.Instantiate(LevelManager.Instance.playerPrefab, playerSpawn.position, Quaternion.identity, transform);
+        LevelManager.Instance.playerInstance = GameObject.Instantiate(LevelManager.Instance.playerPrefab, playerSpawn.position, Quaternion.identity);
         //LevelManager.Instance.playerPoints = 0;
     }
 }

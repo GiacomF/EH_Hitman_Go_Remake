@@ -12,8 +12,8 @@ public class LevelManager : Singleton<LevelManager>
 
     [Header("Internal Variables")]
     [HideInInspector] public bool isLevelStarted = false;
-    [HideInInspector] public int playerPoints = 0;
-    [HideInInspector] public List<GameObject> coins = new List<GameObject>();
+    //[HideInInspector] public int playerPoints = 0;
+    //[HideInInspector] public List<GameObject> coins = new List<GameObject>();
 
     [Header("Level Objects")]
     public GameObject playerPrefab;
@@ -43,6 +43,7 @@ public class LevelManager : Singleton<LevelManager>
         isLevelStarted = false;
     }
 
+    /*
     public void AddPointsToPlayer(int points)
     {
         playerPoints += points;
@@ -60,4 +61,5 @@ public class LevelManager : Singleton<LevelManager>
             Destroy(coin);
         }
     }
+    */
 }
