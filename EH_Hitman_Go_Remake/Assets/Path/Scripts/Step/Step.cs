@@ -7,34 +7,46 @@ using UnityEngine;
 public class Step : MonoBehaviour
 {
     [Serializable]
-    public struct StepInfo
+    public struct ViewStepInfo
     {
+        public bool isMist;
         public int myIndex;
         public List<Step> Connections;
-        public bool isTrapdoor;
-        public Step TrapdoorConnection;
-        public bool isMist;
     }
 
-    public StepInfo myStepInfo;
+    public bool isTrapdoor;
+    public Step TrapdoorConnection;
+    public ViewStepInfo myStepInfo;
+    public GameObject myMistObj;
+    public Entity.EntityBehaviour myEntityBehaviour;
+    public Step myEntityDirection;
+    private void CheckisMist()
+    {
+        myMistObj.SetActive(myStepInfo.isMist);
+    }
 
     public void SetTrapdoorConnection(Step connection)
     {
-        myStepInfo.TrapdoorConnection = connection;
+        TrapdoorConnection = connection;
     }
 
     private bool CheckisTrapdoor()
     {
-        if(myStepInfo.TrapdoorConnection == null)
+        if(TrapdoorConnection == null)
         {
-            myStepInfo.isTrapdoor = false;
+            isTrapdoor = false;
         }
         else
         {
-            myStepInfo.isTrapdoor = true;
+            isTrapdoor = true;
         }
         
-        return myStepInfo.isTrapdoor;
+        return isTrapdoor;
+    }
+
+    public void SetStepInfo(ViewStepInfo newInfo)
+    {
+        myStepInfo = newInfo;
     }
 
     public void UpdateStatus(SceneView sceneView)
@@ -42,6 +54,7 @@ public class Step : MonoBehaviour
         Event e = Event.current;
 
         CheckisTrapdoor();
+        CheckisMist();
     }
 
     private void OnEnable ()

@@ -24,54 +24,6 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
     ""name"": ""Input_Actions"",
     ""maps"": [
         {
-            ""name"": ""MapEditor"",
-            ""id"": ""cd2b04d9-5207-4361-a09a-e814bb2a79fd"",
-            ""actions"": [
-                {
-                    ""name"": ""SelectNode"",
-                    ""type"": ""Button"",
-                    ""id"": ""ae424ebf-1785-4da2-aa14-28b8c39bacd3"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""DeselectNode"",
-                    ""type"": ""Button"",
-                    ""id"": ""393f1454-e2e3-4dc7-b5ec-bed9cdabd79b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""8a42e3ea-a735-4c35-b1c8-f61a6c654085"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": ""Tap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""SelectNode"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""bfaf7f02-afb5-4c6a-97ac-bacacfbeaf6a"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Tap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard and Mouse"",
-                    ""action"": ""DeselectNode"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
             ""name"": ""Gameplay"",
             ""id"": ""82b94e66-6ead-4fb8-b358-0b8c0eaf9a64"",
             ""actions"": [
@@ -169,10 +121,6 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
         }
     ]
 }");
-        // MapEditor
-        m_MapEditor = asset.FindActionMap("MapEditor", throwIfNotFound: true);
-        m_MapEditor_SelectNode = m_MapEditor.FindAction("SelectNode", throwIfNotFound: true);
-        m_MapEditor_DeselectNode = m_MapEditor.FindAction("DeselectNode", throwIfNotFound: true);
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Interaction = m_Gameplay.FindAction("Interaction", throwIfNotFound: true);
@@ -236,60 +184,6 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
     {
         return asset.FindBinding(bindingMask, out action);
     }
-
-    // MapEditor
-    private readonly InputActionMap m_MapEditor;
-    private List<IMapEditorActions> m_MapEditorActionsCallbackInterfaces = new List<IMapEditorActions>();
-    private readonly InputAction m_MapEditor_SelectNode;
-    private readonly InputAction m_MapEditor_DeselectNode;
-    public struct MapEditorActions
-    {
-        private @Input_Actions m_Wrapper;
-        public MapEditorActions(@Input_Actions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @SelectNode => m_Wrapper.m_MapEditor_SelectNode;
-        public InputAction @DeselectNode => m_Wrapper.m_MapEditor_DeselectNode;
-        public InputActionMap Get() { return m_Wrapper.m_MapEditor; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MapEditorActions set) { return set.Get(); }
-        public void AddCallbacks(IMapEditorActions instance)
-        {
-            if (instance == null || m_Wrapper.m_MapEditorActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MapEditorActionsCallbackInterfaces.Add(instance);
-            @SelectNode.started += instance.OnSelectNode;
-            @SelectNode.performed += instance.OnSelectNode;
-            @SelectNode.canceled += instance.OnSelectNode;
-            @DeselectNode.started += instance.OnDeselectNode;
-            @DeselectNode.performed += instance.OnDeselectNode;
-            @DeselectNode.canceled += instance.OnDeselectNode;
-        }
-
-        private void UnregisterCallbacks(IMapEditorActions instance)
-        {
-            @SelectNode.started -= instance.OnSelectNode;
-            @SelectNode.performed -= instance.OnSelectNode;
-            @SelectNode.canceled -= instance.OnSelectNode;
-            @DeselectNode.started -= instance.OnDeselectNode;
-            @DeselectNode.performed -= instance.OnDeselectNode;
-            @DeselectNode.canceled -= instance.OnDeselectNode;
-        }
-
-        public void RemoveCallbacks(IMapEditorActions instance)
-        {
-            if (m_Wrapper.m_MapEditorActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IMapEditorActions instance)
-        {
-            foreach (var item in m_Wrapper.m_MapEditorActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_MapEditorActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public MapEditorActions @MapEditor => new MapEditorActions(this);
 
     // Gameplay
     private readonly InputActionMap m_Gameplay;
@@ -408,11 +302,6 @@ public partial class @Input_Actions: IInputActionCollection2, IDisposable
             if (m_TouchSchemeIndex == -1) m_TouchSchemeIndex = asset.FindControlSchemeIndex("Touch");
             return asset.controlSchemes[m_TouchSchemeIndex];
         }
-    }
-    public interface IMapEditorActions
-    {
-        void OnSelectNode(InputAction.CallbackContext context);
-        void OnDeselectNode(InputAction.CallbackContext context);
     }
     public interface IGameplayActions
     {
