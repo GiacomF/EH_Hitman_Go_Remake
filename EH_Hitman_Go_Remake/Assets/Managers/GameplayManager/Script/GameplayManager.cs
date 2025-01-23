@@ -25,6 +25,8 @@ public class GameplayManager : Singleton<GameplayManager>
     public float AnimationMoveDuration;
 
     public List<Entity> m_foundEntities;
+
+    public AudioClip movementClip;
     public void RegisterEntity(Entity entity)
     {
         m_foundEntities.Add(entity);
@@ -90,6 +92,7 @@ public class GameplayManager : Singleton<GameplayManager>
                 Step selectedStep = selectedObject.GetComponent<Step>();
                 if (CheckValidConnection(selectedStep))
                 {
+                    AudioManager.instance.PlaySFX(movementClip);
                     MoveTowardsWithDOTween(Player, selectedObject.transform);
                     m_currentTurn = Turn.Enemies;
                     playerPosition = selectedStep;
