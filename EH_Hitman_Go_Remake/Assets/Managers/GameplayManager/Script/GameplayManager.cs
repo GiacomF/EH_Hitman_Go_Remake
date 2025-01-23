@@ -171,6 +171,7 @@ public class GameplayManager : Singleton<GameplayManager>
 
     private void Update()
     {
+        /*
         if (m_currentTurn == Turn.Enemies)
         {
             Debug.Log(m_currentTurn);
@@ -195,5 +196,57 @@ public class GameplayManager : Singleton<GameplayManager>
             m_currentTurn = Turn.Player;
             Debug.Log(m_currentTurn);
         }
+        */
+
+        if (m_currentTurn == Turn.Enemies)
+        {
+            StartCoroutine(HandleEnemyTurn());
+        }
+    }
+
+    private Step GetNextStep(Step currentStep, Step targetStep)
+    {
+        // Trova il prossimo step tra le connessioni
+        foreach (Step connection in currentStep.myStepInfo.Connections)
+        {
+            // Verifica se questa connessione si avvicina alla destinazione
+            if (connection == targetStep || connection.myStepInfo.Connections.Contains(targetStep))
+            {
+                return connection;
+            }
+        }
+
+        // Se nessuna connessione valida è trovata, rimani sullo step corrente
+        return currentStep;
+    }
+
+    private IEnumerator HandleEnemyTurn()
+    {
+        foreach (Entity entity in m_foundEntities)
+        {
+            if (entity.m_entityBehaviour == Entity.EntityBehaviour.Patrol)
+            {
+                // Calcola il prossimo step
+                Step nextStep = GetNextStep(entity.myPosition, entity.myDirection);
+
+                // Muovi il nemico verso il prossimo step
+                MoveTowardsWithDOTween(entity.gameObject, nextStep.transform);
+                yield return new WaitForSeconds(AnimationMoveDuration);
+
+                // Aggiorna la posizione attuale del nemico
+                entity.myPosition = nextStep;
+
+                // Controlla se il nemico ha raggiunto la destinazione finale
+                if (entity.myPosition == entity.myDirection)
+                {
+                    // Cambia direzione (ritorna all'origine)
+                    entity.myDirection = entity.myOriginPosition;
+                    entity.myOriginPosition = nextStep; // Inverti per andare avanti e indietro
+                }
+            }
+        }
+
+        // Passa al turno del giocatore
+        m_currentTurn = Turn.Player;
     }
 }

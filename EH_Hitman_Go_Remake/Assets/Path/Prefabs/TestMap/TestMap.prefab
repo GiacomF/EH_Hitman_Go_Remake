@@ -2941,8 +2941,8 @@ MonoBehaviour:
     - {fileID: 6642727663735331129}
     - {fileID: 1222968522845118366}
   myMistObj: {fileID: 1327522904110736775}
-  myEntityBehaviour: 4
-  myEntityDirection: {fileID: 6642727663735331129}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &8351693118718800395
 GameObject:
   m_ObjectHideFlags: 0
@@ -3073,8 +3073,8 @@ MonoBehaviour:
     - {fileID: 3588184988716410650}
     - {fileID: 3430808424398577654}
   myMistObj: {fileID: 7646656296033508588}
-  myEntityBehaviour: 0
-  myEntityDirection: {fileID: 0}
+  myEntityBehaviour: 4
+  myEntityDirection: {fileID: 6642727663735331129}
 --- !u!1 &8631754272039800037
 GameObject:
   m_ObjectHideFlags: 0

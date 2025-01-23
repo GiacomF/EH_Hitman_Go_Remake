@@ -550,6 +550,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 289376159391626464, guid: d95f2289a75f42349b06b5212d49716e,
         type: 3}
+    - target: {fileID: 7233710494646519734, guid: 101a882b6507cfd49a64f10fe3c8c201,
+        type: 3}
+      propertyPath: AnimationMoveDuration
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
