@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 5135047243831197643}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.587055, y: -8.263562, z: -0.2491107}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mixer: {fileID: 24100000, guid: 7344dda268b99314bb1f5f6cbdc3d485, type: 2}
-  musicSource: {fileID: 0}
   SFXSource: {fileID: 3710719147556071588, guid: 4f04a66143f70ec448d502bfcc2b3d0f,
     type: 3}
   BGM: {fileID: 8300000, guid: e5f940acc4d40d14fb698b6feb8961a6, type: 3}

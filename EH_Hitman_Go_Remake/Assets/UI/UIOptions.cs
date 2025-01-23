@@ -33,12 +33,12 @@ public class UIOptions : GameUI
 
     public void OnMusicVolumeChange(float value)
     {
-        //SoundMixerManager.Instance.SetMusicVolume(value);
+        AudioManager.instance.SetVolume("MusicVolume", value);
     }
 
     public void OnSoundFXVolumeChange(float value)
     {
-        //SoundMixerManager.Instance.SetSoundFXVolume(value);
+        AudioManager.instance.SetVolume("SFXVolume", value);
     }
 
 }

@@ -37,7 +37,15 @@ public class AudioManager : MonoBehaviour
         musicSource.Play();
     }
 
-    public void PlaySoundFX(AudioClip clip, float randomPitch)
+    public void PlaySFX(AudioClip clip)
+    {
+        AudioSource currentSFX = GameObject.Instantiate(SFXSource).GetComponent<AudioSource>();
+        currentSFX.clip = clip;
+        currentSFX.Play();
+        Destroy(currentSFX.gameObject, clip.length);
+    }
+
+    public void PlaySFXRanPitch(AudioClip clip, float randomPitch)
     {
         AudioSource currentSFX = GameObject.Instantiate(SFXSource).GetComponent<AudioSource>();
         currentSFX.pitch = Random.Range(1 - randomPitch, 1 + randomPitch);
@@ -48,6 +56,10 @@ public class AudioManager : MonoBehaviour
 
     public void SetVolume(string chosenMixer, float newVolume)
     {
-        mixer.SetFloat(chosenMixer, newVolume);
+        mixer.SetFloat(chosenMixer, ConvertToDecibel(newVolume));
+    }
+    public float ConvertToDecibel(float value)
+    {
+        return Mathf.Log10(Mathf.Max(value, 0.0001f)) * 20f;
     }
 }
