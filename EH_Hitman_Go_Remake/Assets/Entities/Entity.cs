@@ -11,6 +11,9 @@ public class Entity : MonoBehaviour
         Patrol,
         Dog
     }
+    public Step myDirection;
+    public Step myPosition;
+    public Step myOriginPosition;
 
     public EntityBehaviour m_entityBehaviour;
 

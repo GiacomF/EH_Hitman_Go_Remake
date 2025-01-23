@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class GameplayManager : Singleton<GameplayManager>
 {
@@ -11,13 +12,14 @@ public class GameplayManager : Singleton<GameplayManager>
     }
 
     public Turn m_currentTurn;
-    public GameObject Player;
+    [HideInInspector] public GameObject Player;
     public Transform startPosition;
     public Transform entityStartingPosition;
     private float yOffset;
+    public Step playerPosition;
 
     private GameObject myMap;
-    private Collector myCollector;
+    public Collector myCollector;
     public List<Step> StepsInMap;
     public LayerMask InteractableLayer;
     public float AnimationMoveDuration;
@@ -39,6 +41,16 @@ public class GameplayManager : Singleton<GameplayManager>
         {
             MoveTowardsWithDOTween(entity, )
         }*/
+    }
+
+    private bool CheckValidConnection(Step step)
+    {
+        bool connection = false;
+        if (playerPosition.myStepInfo.Connections.Contains(step)){
+            connection = true;
+        }
+        
+        return connection;
     }
 
     [SerializeField]
@@ -75,10 +87,13 @@ public class GameplayManager : Singleton<GameplayManager>
             if(Physics.Raycast(ray, out hit, Mathf.Infinity, InteractableLayer))
             {
                 GameObject selectedObject = hit.collider.gameObject;
-
-                MoveTowardsWithDOTween(Player, selectedObject.transform);
-
-                m_currentTurn = Turn.Enemies;
+                Step selectedStep = selectedObject.GetComponent<Step>();
+                if (CheckValidConnection(selectedStep))
+                {
+                    MoveTowardsWithDOTween(Player, selectedObject.transform);
+                    m_currentTurn = Turn.Enemies;
+                    playerPosition = selectedStep;
+                }
             }
         }
     }
@@ -102,12 +117,9 @@ public class GameplayManager : Singleton<GameplayManager>
         return collectorFound;
     }
 
-    private void Initialize()
+    public void Initialize()
     {
-        if(FindCollector())
-        {
-            StepsInMap = myCollector.stepsCollected;
-        }
+        StepsInMap = myCollector.stepsCollected;
 
         if(Player != null)
         {
@@ -119,6 +131,7 @@ public class GameplayManager : Singleton<GameplayManager>
             Player.transform.position = startPosition.position + new Vector3(0, yOffset, 0);
         }
 
+        /*
         if(m_foundEntities.Count != 0)
         {
             foreach(Entity e in m_foundEntities)
@@ -131,10 +144,56 @@ public class GameplayManager : Singleton<GameplayManager>
         {
             CicleThroughEntities();
         }
+        */
     }
 
-    void Start()
+    public void PositionEntities(GameObject entity, Transform position)
     {
-        Initialize();
+        entity.transform.position = position.position + new Vector3(0, yOffset, 0);
+    }
+
+    private IEnumerator waitForTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+    }
+
+    private void CheckDownRaycast(Entity entity)
+    {
+        Vector3 origin = transform.position;
+        Vector3 direction = Vector3.down;
+
+        if(Physics.Raycast(origin, direction, out RaycastHit hit, 1f, InteractableLayer))
+        {
+            entity.myPosition = hit.collider.gameObject.GetComponent<Step>();
+        }
+    }
+
+    private void Update()
+    {
+        if (m_currentTurn == Turn.Enemies)
+        {
+            Debug.Log(m_currentTurn);
+            foreach (Entity entity in m_foundEntities)
+            {
+                if (entity.m_entityBehaviour == Entity.EntityBehaviour.Patrol)
+                {
+                    Debug.Log(entity.myPosition);
+                    if (entity.myPosition != entity.myDirection)
+                    {
+                        MoveTowardsWithDOTween(entity.gameObject, entity.myDirection.transform);
+                        StartCoroutine(waitForTime(AnimationMoveDuration));
+                        CheckDownRaycast(entity);    
+                    }
+                    else 
+                    if(entity.myPosition == entity.myDirection)
+                    {
+                        MoveTowardsWithDOTween(entity.gameObject, entity.myOriginPosition.transform);
+                    }
+                }
+            }
+            m_currentTurn = Turn.Player;
+            Debug.Log(m_currentTurn);
+        }
     }
 }

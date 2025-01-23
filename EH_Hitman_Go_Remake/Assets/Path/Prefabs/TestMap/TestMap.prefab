@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 3187444339467679407}
   - component: {fileID: 9127971811231985107}
   - component: {fileID: 6642727663735331129}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,15 +383,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 6
     Connections:
     - {fileID: 3588184988716410650}
     - {fileID: 2340512956810368757}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 446388767274220888}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &879590928169555637
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +407,7 @@ GameObject:
   - component: {fileID: 887567159663436790}
   - component: {fileID: 609103182735534168}
   - component: {fileID: 1222968522845118366}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -513,16 +515,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 8
     Connections:
     - {fileID: 2340512956810368757}
     - {fileID: 664565973755898038}
     - {fileID: 3588184988716410650}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 4651776951513488924}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &1327522904110736775
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,7 +801,6 @@ GameObject:
   - component: {fileID: 1873630072233136012}
   - component: {fileID: 4391568380369868370}
   - component: {fileID: 4545757740016087189}
-  - component: {fileID: 8483470005899666851}
   m_Layer: 0
   m_Name: TestMap
   m_TagString: Untagged
@@ -895,19 +898,7 @@ MonoBehaviour:
   - {fileID: 2340512956810368757}
   - {fileID: 1222968522845118366}
   - {fileID: 664565973755898038}
---- !u!114 &8483470005899666851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1595533120132363104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 463b9737e6f8a764593af7a8674f1c9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSpawn: {fileID: 748817831136540770}
+  startPosition: {fileID: 664565973755898038}
 --- !u!1 &1749993928025323726
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,7 +912,7 @@ GameObject:
   - component: {fileID: 3024387981656945274}
   - component: {fileID: 3487260639610180375}
   - component: {fileID: 2340512956810368757}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1029,15 +1020,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 7
     Connections:
     - {fileID: 6642727663735331129}
     - {fileID: 1222968522845118366}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 3455871285141976157}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &2120080743199771116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,7 +1044,7 @@ GameObject:
   - component: {fileID: 5343182710575292755}
   - component: {fileID: 3691134046928207346}
   - component: {fileID: 664565973755898038}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1159,14 +1152,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 9
     Connections:
     - {fileID: 1222968522845118366}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 1483962804431526338}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &2565527604279141456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,7 +1354,7 @@ GameObject:
   - component: {fileID: 4529416074641320394}
   - component: {fileID: 5029799699571636965}
   - component: {fileID: 7193051063428158109}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1467,16 +1462,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 1
     Connections:
     - {fileID: 3588184988716410650}
     - {fileID: 4221058711002212111}
     - {fileID: 5008934127228993387}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 4612771736426513347}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &3455871285141976157
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,7 +2010,7 @@ GameObject:
   - component: {fileID: 8995013333969289794}
   - component: {fileID: 1219939899259926351}
   - component: {fileID: 3430808424398577654}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2121,14 +2118,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 4
     Connections:
     - {fileID: 7824408456443983033}
-    isTrapdoor: 1
-    TrapdoorConnection: {fileID: 4221058711002212111}
-    isMist: 0
   myMistObj: {fileID: 6086897879290923088}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &5134507432979370363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2609,7 +2608,7 @@ GameObject:
   - component: {fileID: 2977185846066219637}
   - component: {fileID: 9083818406385660482}
   - component: {fileID: 5008934127228993387}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2717,14 +2716,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 5
     Connections:
     - {fileID: 7193051063428158109}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 2565527604279141456}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &7646656296033508588
 GameObject:
   m_ObjectHideFlags: 0
@@ -2821,7 +2822,7 @@ GameObject:
   - component: {fileID: 7374227435743818931}
   - component: {fileID: 3835937930558927709}
   - component: {fileID: 3588184988716410650}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2929,17 +2930,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 0
     Connections:
     - {fileID: 7193051063428158109}
     - {fileID: 7824408456443983033}
     - {fileID: 6642727663735331129}
     - {fileID: 1222968522845118366}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 1327522904110736775}
+  myEntityBehaviour: 4
+  myEntityDirection: {fileID: 6642727663735331129}
 --- !u!1 &8351693118718800395
 GameObject:
   m_ObjectHideFlags: 0
@@ -2953,7 +2956,7 @@ GameObject:
   - component: {fileID: 1496852439571159608}
   - component: {fileID: 1899949757048104104}
   - component: {fileID: 7824408456443983033}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3061,15 +3064,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 3
     Connections:
     - {fileID: 3588184988716410650}
     - {fileID: 3430808424398577654}
-    isTrapdoor: 0
-    TrapdoorConnection: {fileID: 0}
-    isMist: 0
   myMistObj: {fileID: 7646656296033508588}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &8631754272039800037
 GameObject:
   m_ObjectHideFlags: 0
@@ -3083,7 +3088,7 @@ GameObject:
   - component: {fileID: 711485253308032866}
   - component: {fileID: 8695706173097081974}
   - component: {fileID: 4221058711002212111}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Step 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3191,14 +3196,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307c9f3f83ba9a74283e929f12af8dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTrapdoor: 0
+  TrapdoorConnection: {fileID: 0}
   myStepInfo:
+    isMist: 0
     myIndex: 2
     Connections:
     - {fileID: 7193051063428158109}
-    isTrapdoor: 1
-    TrapdoorConnection: {fileID: 3430808424398577654}
-    isMist: 0
   myMistObj: {fileID: 554048065464037259}
+  myEntityBehaviour: 0
+  myEntityDirection: {fileID: 0}
 --- !u!1 &9147750802364521180
 GameObject:
   m_ObjectHideFlags: 0
